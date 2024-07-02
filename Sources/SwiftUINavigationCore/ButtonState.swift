@@ -1,5 +1,6 @@
 #if canImport(SwiftUI)
   import CustomDump
+  import IssueReporting
   import SwiftUI
 
   public struct ButtonState<Action>: Identifiable {
@@ -72,14 +73,15 @@
     /// > animated, a runtime warning will be emitted.
     ///
     /// - Parameter perform: Unwraps and passes a button's action to a closure to be performed.
-    public func withAction(_ perform: (Action?) async -> Void) async {
+    @MainActor
+    public func withAction(_ perform: @MainActor (Action?) async -> Void) async {
       switch self.action.type {
       case let .send(action):
         await perform(action)
       case let .animatedSend(action, _):
         var output = ""
         customDump(self.action, to: &output, indent: 4)
-        runtimeWarn(
+        reportIssue(
           """
           An animated action was performed asynchronously: …
 

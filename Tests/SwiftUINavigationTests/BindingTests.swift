@@ -53,7 +53,7 @@
 
   extension Binding {
     fileprivate init(initialValue: Value) {
-      var value = initialValue
+      nonisolated(unsafe) var value = initialValue
       self.init(
         get: { value },
         set: { value = $0 }

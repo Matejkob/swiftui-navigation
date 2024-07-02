@@ -6,7 +6,7 @@
 
   final class SwiftUINavigationTests: XCTestCase {
     func testBindingUnwrap() throws {
-      var value: Int?
+      nonisolated(unsafe) var value: Int?
       let binding = Binding(get: { value }, set: { value = $0 })
 
       XCTAssertNil(Binding(unwrapping: binding))
@@ -31,7 +31,7 @@
 
     func testBindingCase() throws {
       struct MyError: Error, Equatable {}
-      var value: Result<Int, MyError>? = nil
+      nonisolated(unsafe) var value: Result<Int, MyError>? = nil
       let binding = Binding(get: { value }, set: { value = $0 })
 
       let success = binding.case(/Result.success)
